@@ -22,7 +22,7 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
-    @GetMapping("all")
+    @GetMapping
     public List<Product> getProducts() {
         return null;
     }
@@ -44,12 +44,20 @@ public class ProductController {
         }
     }
 
-    @PostMapping("make")
+    @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         Product product = mapToProduct(productDto);
         Product newProduct = iProductService.createProduct(product);
         ProductDto newProductDto = mapToProductDto(newProduct);
         return new ResponseEntity<>(newProductDto, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto productDto) {
+        Product product = mapToProduct(productDto);
+        Product updatedProduct = iProductService.updateProduct(productId, product);
+        ProductDto updatedProductDto = mapToProductDto(updatedProduct);
+        return new ResponseEntity<>(updatedProductDto, HttpStatus.OK);
     }
 
     private ProductDto mapToProductDto(Product product) {

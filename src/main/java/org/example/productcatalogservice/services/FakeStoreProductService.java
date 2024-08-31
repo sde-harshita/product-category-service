@@ -6,7 +6,13 @@ import org.example.productcatalogservice.models.Category;
 import org.example.productcatalogservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -36,6 +42,20 @@ public class FakeStoreProductService implements IProductService {
         FakeStoreProductDto newfakeStoreProduct = restTemplate.postForEntity("https://fakestoreapi.com/products", fakeStoreProduct, FakeStoreProductDto.class).getBody();
         return mapFSToProduct(newfakeStoreProduct);
     }
+
+    public Product updateProduct(Long id, Product product) {
+        RestTemplate restTemplate= restTemplateBuilder.build();
+        FakeStoreProductDto fakeStoreProduct = mapProductToFSDto(product);
+        FakeStoreProductDto newFakeStoreProduct = restTemplate.patchForObject("https://fakestoreapi.com/products/{id}", fakeStoreProduct, FakeStoreProductDto.class, id);
+        return mapFSToProduct(newFakeStoreProduct);
+    }
+
+//    private <T> ResponseEntity<T> requestForEntity(String url, @Nullable Object request, Class<T> responseType, Object... uriVariables) throws RestClientException {
+//        RestTemplate restTemplate = restTemplateBuilder.build();
+//        RequestCallback requestCallback = restTemplate.httpEntityCallback(request, responseType);
+//        ResponseExtractor<ResponseEntity<T>> responseExtractor = restTemplate.responseEntityExtractor(responseType);
+//        return (ResponseEntity) nonNull((ResponseEntity)restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor, uriVariables));
+//    }
 
     private Product mapFSToProduct(FakeStoreProductDto fakeStoreProduct) {
         Product product = new Product();
