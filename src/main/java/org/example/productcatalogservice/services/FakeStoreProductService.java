@@ -15,6 +15,7 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,15 +25,22 @@ public class FakeStoreProductService implements IProductService {
     private RestTemplateBuilder restTemplateBuilder;
 
     @Override
+    public List<Product> getAllProducts() {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        FakeStoreProductDto[] fakeStoreProducts = restTemplate.getForEntity("https://fakestoreapi.com/products", FakeStoreProductDto[].class).getBody();
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductDto fakeStoreProduct : fakeStoreProducts) {
+           Product product = mapFSToProduct(fakeStoreProduct);
+           products.add(product);
+        }
+        return products;
+    }
+
+    @Override
     public Product getProductById(Long id) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         FakeStoreProductDto fakeStoreProduct = restTemplate.getForEntity("https://fakestoreapi.com/products/{id}", FakeStoreProductDto.class, id).getBody();
         return mapFSToProduct(fakeStoreProduct);
-    }
-
-    @Override
-    public List<Product> getAllProducts() {
-        return null;
     }
 
     @Override

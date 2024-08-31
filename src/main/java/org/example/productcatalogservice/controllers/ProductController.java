@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,14 @@ public class ProductController {
     private IProductService iProductService;
 
     @GetMapping
-    public List<Product> getProducts() {
-        return null;
+    public List<ProductDto> getProducts() {
+        List<Product> products = iProductService.getAllProducts();
+        List<ProductDto> productList = new ArrayList<ProductDto>();
+        for (Product product : products) {
+            ProductDto productDto = mapToProductDto(product);
+            productList.add(productDto);
+        }
+        return productList;
     }
 
     @GetMapping("{id}")
