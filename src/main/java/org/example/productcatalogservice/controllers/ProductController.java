@@ -1,7 +1,6 @@
 package org.example.productcatalogservice.controllers;
 
 import org.example.productcatalogservice.dto.CategoryDto;
-import org.example.productcatalogservice.dto.FakeStoreProductDto;
 import org.example.productcatalogservice.dto.ProductDto;
 import org.example.productcatalogservice.models.Category;
 import org.example.productcatalogservice.models.Product;
@@ -65,6 +64,13 @@ public class ProductController {
         Product updatedProduct = iProductService.updateProduct(productId, product);
         ProductDto updatedProductDto = mapToProductDto(updatedProduct);
         return new ResponseEntity<>(updatedProductDto, HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<ProductDto> replaceProduct(@PathVariable("id") Long productId, @RequestBody ProductDto productDto) {
+        Product product = mapToProduct(productDto);
+        Product replacedProduct  = iProductService.replaceProduct(productId, product);
+        return new ResponseEntity<>(mapToProductDto(replacedProduct), HttpStatus.OK);
     }
 
     private ProductDto mapToProductDto(Product product) {
