@@ -84,6 +84,7 @@ public class ProductController {
             CategoryDto categoryDto = new CategoryDto();
             categoryDto.setId(product.getCategory().getId());
             categoryDto.setName(product.getCategory().getName());
+            categoryDto.setDescription(product.getCategory().getDescription());
             productDto.setCategory(categoryDto);
         }
         return productDto;
@@ -91,13 +92,16 @@ public class ProductController {
 
     private Product mapToProduct(ProductDto productDto) {
         Product product = new Product();
+//        product.setId(productDto.getId());
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setImageUrl(productDto.getImageUrl());
         product.setPrice(productDto.getPrice());
         if(productDto.getCategory() != null) {
             Category category = new Category();
+//            category.setId(productDto.getCategory().getId());
             category.setName(productDto.getCategory().getName());
+            category.setDescription(productDto.getCategory().getDescription());
             product.setCategory(category);
         }
         return product;

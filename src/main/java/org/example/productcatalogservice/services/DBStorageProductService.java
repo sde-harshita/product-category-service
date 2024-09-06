@@ -1,11 +1,13 @@
 package org.example.productcatalogservice.services;
 
 import org.example.productcatalogservice.models.Product;
+import org.example.productcatalogservice.models.Status;
 import org.example.productcatalogservice.repos.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,14 +29,20 @@ public class DBStorageProductService implements IProductService {
 
     @Override
     public Product createProduct(Product product) {
+        Date d = new Date();
+//        product.setCreatedAt(d);
+//        product.setLastUpdateAt(d);
+//        product.setStatus(Status.ACTIVE);
         return productRepo.save(product);
     }
 
-    public Product updateProduct(Product product) {
+    @Override
+    public Product updateProduct(Long id, Product product) {
         return null;
     }
 
-    public Product replateProduct(Product product) {
+    @Override
+    public Product replaceProduct(Long id, Product product) {
         return null;
     }
 }
